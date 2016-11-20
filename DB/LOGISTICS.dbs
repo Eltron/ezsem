@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Firebird" id="Project_16056ac" html="y" template="Default" database="Firebird" >
+	<schema name="Default" schemaname="Default" >
+		<table name="CLIENT" >
+			<column name="ID" type="integer" jt="4" mandatory="y" />
+			<column name="NAME" type="varchar" length="20" jt="12" mandatory="y" />
+			<column name="SURNAME" type="varchar" length="20" jt="12" mandatory="y" />
+			<column name="OLDNAME" type="varchar" length="20" jt="12" mandatory="y" />
+			<column name="ADDRESS" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="PHONE_NUMBER" type="integer" jt="4" mandatory="y" />
+			<index name="PK_CLIENT" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<fk name="FK_CLIENT" to_schema="Default" to_table="ORD" delete_action="cascade" update_action="cascade" >
+				<fk_column name="ID" pk="ID_CLIENT" />
+			</fk>
+		</table>
+		<table name="LOAD" >
+			<column name="ID" type="integer" length="20" jt="4" mandatory="y" />
+			<column name="NAME" type="varchar" length="20" jt="12" mandatory="y" />
+			<column name="WEIGHT" type="float" jt="6" mandatory="y" />
+			<column name="VOLUME" type="float" jt="6" mandatory="y" />
+			<column name="COST" type="float" jt="6" mandatory="y" />
+			<index name="PK_LOAD" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<fk name="FK_LOAD" to_schema="Default" to_table="ORD" delete_action="cascade" update_action="cascade" >
+				<fk_column name="ID" pk="ID_LOAD" />
+			</fk>
+		</table>
+		<table name="ORD" >
+			<column name="ID" type="integer" jt="4" mandatory="y" />
+			<column name="ID_PROVIDER" type="integer" jt="4" mandatory="y" />
+			<column name="ID_CLIENT" type="integer" jt="4" mandatory="y" />
+			<column name="ID_LOAD" type="integer" jt="4" mandatory="y" />
+			<column name="QUANTITY" type="integer" jt="4" mandatory="y" />
+			<column name="AMOUNT_COST" type="float" jt="6" mandatory="y" />
+			<index name="PK_ORDER" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<index name="PK_ORD" unique="UNIQUE" >
+				<column name="ID_PROVIDER" />
+			</index>
+			<index name="PK_ORD_0" unique="UNIQUE" >
+				<column name="ID_LOAD" />
+			</index>
+			<index name="PK_ORD_1" unique="UNIQUE" >
+				<column name="ID_CLIENT" />
+			</index>
+			<fk name="FK_ORD_0" to_schema="Default" to_table="TRANSPORTATION" delete_action="cascade" update_action="cascade" >
+				<fk_column name="ID" pk="ID_ORD" />
+			</fk>
+		</table>
+		<table name="PROVIDER" >
+			<column name="ID" type="integer" jt="4" mandatory="y" />
+			<column name="NAME" type="varchar" length="20" jt="12" mandatory="y" />
+			<column name="SURNAME" type="varchar" length="20" jt="12" mandatory="y" />
+			<column name="OLDNAME" type="varchar" length="20" jt="12" mandatory="y" />
+			<column name="FIRM" type="varchar" length="20" jt="12" />
+			<column name="ADDRESS" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="PHONE_NUMBER" type="integer" jt="4" mandatory="y" />
+			<index name="PK_PROVIDER" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<fk name="FK_PROVIDER" to_schema="Default" to_table="ORD" delete_action="cascade" update_action="cascade" >
+				<fk_column name="ID" pk="ID_PROVIDER" />
+			</fk>
+		</table>
+		<table name="SHEDULE" >
+			<column name="ID" type="integer" jt="4" mandatory="y" />
+			<column name="ID_TRANSPORTATION" type="integer" jt="4" mandatory="y" />
+			<column name="ARR_DATE" type="timestamp" jt="93" mandatory="y" />
+			<index name="PK_SHEDULE_3" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<index name="PK_SHEDULE" unique="UNIQUE" >
+				<column name="ID_TRANSPORTATION" />
+			</index>
+		</table>
+		<table name="TRANSPORT" >
+			<column name="ID" type="integer" jt="4" mandatory="y" />
+			<column name="NAME" type="varchar" length="20" jt="12" mandatory="y" />
+			<column name="CAPACITY" type="float" jt="6" mandatory="y" />
+			<index name="PK_TRANSPORT" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<fk name="FK_TRANSPORT_0" to_schema="Default" to_table="TRANSPORTATION" delete_action="cascade" update_action="cascade" >
+				<fk_column name="ID" pk="ID_TRANSPORT" />
+			</fk>
+		</table>
+		<table name="TRANSPORTATION" >
+			<column name="ID" type="integer" jt="4" mandatory="y" />
+			<column name="ID_TRANSPORT" type="integer" jt="4" mandatory="y" />
+			<column name="ID_ORD" type="integer" jt="4" mandatory="y" />
+			<index name="PK_TRANSPORTATION" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<index name="PK_TRANSPORTATION_0" unique="UNIQUE" >
+				<column name="ID_ORD" />
+			</index>
+			<index name="PK_TRANSPORTATION_1" unique="UNIQUE" >
+				<column name="ID_TRANSPORT" />
+			</index>
+			<fk name="FK_TRANSPORTATION" to_schema="Default" to_table="SHEDULE" delete_action="cascade" update_action="cascade" >
+				<fk_column name="ID" pk="ID_TRANSPORTATION" />
+			</fk>
+		</table>
+	</schema>
+	<connector name="Firebird" database="Firebird" driver_class="org.firebirdsql.jdbc.FBDriver" driver_jar="jaybird-full-2.2.10.jar" host="localhost" port="3050" instance="D:/ezsem/DB/LOGISTICS.FDB" user="SYSDBA" passwd="bWFzdGVya2V5" />
+	<layout name="Default Layout" id="Layout_1d50336a" show_relation="columns" >
+		<entity schema="Default" name="ORD" color="c1d8ee" x="420" y="210" />
+		<entity schema="Default" name="LOAD" color="c1d8ee" x="600" y="210" />
+		<entity schema="Default" name="TRANSPORT" color="c1d8ee" x="45" y="45" />
+		<entity schema="Default" name="PROVIDER" color="c1d8ee" x="225" y="255" />
+		<entity schema="Default" name="SHEDULE" color="c1d8ee" x="225" y="45" />
+		<entity schema="Default" name="TRANSPORTATION" color="c1d8ee" x="45" y="180" />
+		<entity schema="Default" name="CLIENT" color="c1d8ee" x="420" y="45" />
+		<script name="Sql" id="Query_25cfbd31" language="SQL" >
+			<string><![CDATA[CREATE TABLE SHEDULE ( 
+	ID                   integer  NOT NULL,
+	ID_TRANSPORTATION    integer  NOT NULL,
+	ARR_DATE             timestamp  NOT NULL,
+	CONSTRAINT PK_SHEDULE_3 PRIMARY KEY ( ID ),
+	CONSTRAINT PK_SHEDULE UNIQUE ( ID_TRANSPORTATION ) 
+ );
+
+CREATE TABLE TRANSPORTATION ( 
+	ID                   integer  NOT NULL,
+	ID_TRANSPORT         integer  NOT NULL,
+	ID_ORD               integer  NOT NULL,
+	CONSTRAINT PK_TRANSPORTATION PRIMARY KEY ( ID ),
+	CONSTRAINT PK_TRANSPORTATION_0 UNIQUE ( ID_ORD ) ,
+	CONSTRAINT PK_TRANSPORTATION_1 UNIQUE ( ID_TRANSPORT ) 
+ );
+
+CREATE TABLE ORD ( 
+	ID                   integer  NOT NULL,
+	ID_PROVIDER          integer  NOT NULL,
+	ID_CLIENT            integer  NOT NULL,
+	ID_LOAD              integer  NOT NULL,
+	QUANTITY             integer  NOT NULL,
+	AMOUNT_COST          float  NOT NULL,
+	CONSTRAINT PK_ORDER PRIMARY KEY ( ID ),
+	CONSTRAINT PK_ORD UNIQUE ( ID_PROVIDER ) ,
+	CONSTRAINT PK_ORD_0 UNIQUE ( ID_LOAD ) ,
+	CONSTRAINT PK_ORD_1 UNIQUE ( ID_CLIENT ) 
+ );
+
+CREATE TABLE PROVIDER ( 
+	ID                   integer  NOT NULL,
+	NAME                 varchar(20)  NOT NULL,
+	SURNAME              varchar(20)  NOT NULL,
+	OLDNAME              varchar(20)  NOT NULL,
+	FIRM                 varchar(20)  ,
+	ADDRESS              varchar(100)  NOT NULL,
+	PHONE_NUMBER         integer  NOT NULL,
+	CONSTRAINT PK_PROVIDER PRIMARY KEY ( ID )
+ );
+
+CREATE TABLE TRANSPORT ( 
+	ID                   integer  NOT NULL,
+	NAME                 varchar(20)  NOT NULL,
+	CAPACITY             float  NOT NULL,
+	CONSTRAINT PK_TRANSPORT PRIMARY KEY ( ID )
+ );
+
+CREATE TABLE CLIENT ( 
+	ID                   integer  NOT NULL,
+	NAME                 varchar(20)  NOT NULL,
+	SURNAME              varchar(20)  NOT NULL,
+	OLDNAME              varchar(20)  NOT NULL,
+	ADDRESS              varchar(100)  NOT NULL,
+	PHONE_NUMBER         integer  NOT NULL,
+	CONSTRAINT PK_CLIENT PRIMARY KEY ( ID )
+ );
+
+CREATE TABLE LOAD ( 
+	ID                   integer  NOT NULL,
+	NAME                 varchar(20)  NOT NULL,
+	WEIGHT               float  NOT NULL,
+	VOLUME               float  NOT NULL,
+	COST                 float  NOT NULL,
+	CONSTRAINT PK_LOAD PRIMARY KEY ( ID )
+ );
+
+ALTER TABLE CLIENT ADD CONSTRAINT FK_CLIENT FOREIGN KEY ( ID ) REFERENCES ORD( ID_CLIENT ) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE LOAD ADD CONSTRAINT FK_LOAD FOREIGN KEY ( ID ) REFERENCES ORD( ID_LOAD ) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE ORD ADD CONSTRAINT FK_ORD_0 FOREIGN KEY ( ID ) REFERENCES TRANSPORTATION( ID_ORD ) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE PROVIDER ADD CONSTRAINT FK_PROVIDER FOREIGN KEY ( ID ) REFERENCES ORD( ID_PROVIDER ) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE TRANSPORT ADD CONSTRAINT FK_TRANSPORT_0 FOREIGN KEY ( ID ) REFERENCES TRANSPORTATION( ID_TRANSPORT ) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE TRANSPORTATION ADD CONSTRAINT FK_TRANSPORTATION FOREIGN KEY ( ID ) REFERENCES SHEDULE( ID_TRANSPORTATION ) ON DELETE CASCADE ON UPDATE CASCADE;
+
+]]></string>
+		</script>
+	</layout>
+</project>
