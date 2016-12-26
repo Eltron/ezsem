@@ -1,0 +1,7 @@
+select distinct transport.id, transport.capacity-(select sum(transportation.load_quant * load.weight) as load_trans from transportation, ord, load where transport.id = transportation.id_transport
+and ord.id = transportation.id_ord
+and load.id = ord.id_load) as rem_capacity
+from load, ord, transportation, transport
+where transport.id = transportation.id_transport
+and ord.id = transportation.id_ord
+and load.id = ord.id_load
